@@ -404,36 +404,12 @@ if 'teachers_data' not in st.session_state:
 
 def teachers_view():
     st.title("👨‍🏫 Викладачі")
-    st.markdown("### 🛠️ Управління")
-    tab_add, tab_import, tab_delete = st.tabs(["➕ Додати", "📥 Імпорт", "🗑️ Видалити"])
-    with tab_add:
-        with st.container(border=True):
-            new_pib = st.text_input("ПІБ", placeholder="Прізвище Ім'я По батькові")
-            target_dept = st.selectbox("Кафедра", list(st.session_state.teachers_data.keys()))
-            if st.button("Додати", type="secondary"):
-                if new_pib:
-                    st.session_state.teachers_data[target_dept].insert(0, new_pib)
-                    st.success(f"Викладача {new_pib} успішно додано!")
-                    st.rerun()
-                else: st.error("Будь ласка, введіть ПІБ.")
-    with tab_import:
-        st.info("Виберіть файл форматів .csv або .xlsx для імпорту списку викладачів.")
-        st.file_uploader("Завантажити файл", type=["csv", "xlsx"])
-    with tab_delete:
-        st.warning("Використовуйте іконку кошика 🗑️ біля прізвища викладача у списку нижче.")
-
+    # ВИДАЛЕНО РОЗДІЛ "УПРАВЛІННЯ" ТА МОЖЛИВІСТЬ РЕДАГУВАННЯ/ВИДАЛЕННЯ
     st.divider()
     for dept, teachers in st.session_state.teachers_data.items():
         with st.expander(f"📚 {dept}", expanded=True):
             for i, t in enumerate(teachers):
-                col_text, col_edit, col_del = st.columns([0.8, 0.05, 0.05])
-                with col_text: st.write(f"- {t}")
-                with col_edit:
-                    if st.button("✏️", key=f"edit_{dept}_{i}"): st.toast(f"Режим редагування для: {t}")
-                with col_del:
-                    if st.button("🗑️", key=f"del_{dept}_{i}"):
-                        st.session_state.teachers_data[dept].pop(i)
-                        st.rerun()
+                st.write(f"- {t}")
 
 def schedule_view():
     st.title("📅 Розклад")
@@ -491,7 +467,7 @@ def documents_view():
     with tabs[1]:
         st.subheader("Подання нового запиту")
         with st.form("doc_create"):
-            d_type = st.selectbox("Тип документу", ["Довідка про навчання", "Заява на матеріальну допомогу", "Заява на індивідуальний графік"])
+            d_type = st.selectbox("Тип документу", ["Dовідка про навчання", "Заява на матеріальну допомогу", "Заява на індивідуальний графік"])
             d_comment = st.text_input("Додаткові примітки")
             if st.form_submit_button("Надіслати запит"):
                 full_title = f"{d_type}" + (f" ({d_comment})" if d_comment else "")
