@@ -8,7 +8,7 @@ import altair as alt
 import re  # Для логіки переведення курсів
 
 # --- КОНФІГУРАЦІЯ СТОРІНКИ ---
-st.set_page_config(page_title="ФМФКН - Деканат", layout="wide", page_icon="🎓")
+st.set_page_config(page_title="Veb kabinet", layout="wide", page_icon="🎓")
 
 # --- ЛОГІКА ПЕРЕМИКАННЯ ТЕМИ ---
 if 'theme' not in st.session_state:
@@ -58,9 +58,9 @@ else:
 
 
 # --- КОНСТАНТИ ТА ПРАВА ДОСТУПУ ---
-ROLES_LIST = ["admin", "teacher"]
-TEACHER_LEVEL = ['admin', 'teacher']
-DEAN_LEVEL = ['admin', 'teacher']
+ROLES_LIST = ["teacher"]
+TEACHER_LEVEL = ['teacher']
+DEAN_LEVEL = ['teacher']
 
 # --- СПИСОК ПРЕДМЕТІВ ---
 SUBJECTS_LIST = [
@@ -265,14 +265,14 @@ def convert_df_to_csv(df):
 # --- СТОРІНКИ ---
 
 def login_register_page():
-    st.header("🔐 Вхід / Реєстрація (Адміністрація)")
+    st.header("🔐 Вхід / Реєстрація (Викладач)")
     action = st.radio("Оберіть дію:", ["Вхід", "Реєстрація"], horizontal=True)
     
     conn = create_connection()
     c = conn.cursor()
 
     # Повний список тех. ключів для перевірки при вході
-    ALLOWED_STAFF = ["admin", "teacher"]
+    ALLOWED_STAFF = ["teacher"]
 
     if action == "Вхід":
         username = st.text_input("Логін")
@@ -284,7 +284,7 @@ def login_register_page():
             
             if user:
                 if user[2] not in ALLOWED_STAFF:
-                    st.error("Доступ обмежено. Тільки для персоналу та адміністрації.")
+                    st.error("Доступ обмежено. Тільки для персоналу!")
                 else:
                     st.session_state['logged_in'] = True
                     st.session_state['username'] = user[0]
@@ -299,13 +299,13 @@ def login_register_page():
                 st.error("Невірний логін або пароль")
 
     elif action == "Реєстрація":
-        st.info("Реєстрація доступна для Адміністрації та Викладачів")
+        st.info("Реєстрація доступна для Викладачів")
         new_user = st.text_input("Вигадайте логін")
         new_pass = st.text_input("Вигадайте пароль", type='password')
         
         # ВИДАЛЕНО 'tech_admin' зі списку вибору при реєстрації
-        # Тепер доступні лише 'admin', 'teacher'
-        registration_roles = ["admin", "teacher"]
+        # Тепер доступні лише 'teacher'
+        registration_roles = ["teacher"]
         role = st.selectbox("Ваша посада / Роль", registration_roles)
         
         full_name = st.text_input("Ваше ПІБ (повністю)")
